@@ -48,3 +48,22 @@ export async function loginAction(email, password) {
     };
   }
 }
+
+export async function logout() {
+  try {
+    await clearSessionCookie();
+    return { success: true };
+  } catch {
+    return { success: false };
+  }
+}
+
+export async function getSessionAction() {
+  const session = await getSession();
+  return session;
+}
+
+export async function validateSessionAction() {
+  const session = await getSession();
+  return session !== null;
+}
