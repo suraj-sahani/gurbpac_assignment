@@ -1,5 +1,6 @@
 "use server";
 
+import { createSessionToken, setSessionCookie } from "./auth";
 import { SAMPLE_USERS } from "./constants";
 import { loginSchema } from "./schema";
 
@@ -28,11 +29,11 @@ export async function loginAction(email, password) {
       };
     }
 
-    // // Create session token
-    // const token = createSessionToken(user);
+    // Create session token
+    const token = createSessionToken(user);
 
-    // // Set session cookie
-    // await setSessionCookie(token);
+    // Set session cookie
+    await setSessionCookie(token);
 
     return {
       success: true,

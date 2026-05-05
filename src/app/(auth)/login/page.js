@@ -1,6 +1,19 @@
 import { LoginForm } from "@/components/forms/auth/login-form";
+import { getSession } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const session = await getSession();
+  if (session) {
+    if (session.user.role === "teacher") {
+      redirect("/dashboard/teacher");
+    } else if (session.user.role === "principal") {
+      redirect("/dashboard/principal");
+    } else {
+      redirect("/");
+    }
+  }
+
   return (
     <main className="min-h-screen flex items-center justify-center bg-background px-4">
       <div className="w-full max-w-md space-y-8">

@@ -12,10 +12,19 @@ import { loginSchema } from "@/lib/schema";
 import { AlertCircleIcon } from "@hugeicons/core-free-icons/index";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Field, FieldLabel } from "@/components/ui/field";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@/components/ui/input-group";
+import { ViewOffSlashIcon } from "@hugeicons/core-free-icons/index";
+import { ViewIcon } from "@hugeicons/core-free-icons/index";
 
 export function LoginForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
 
   const form = useForm({
@@ -47,7 +56,7 @@ export function LoginForm() {
         router.push("/");
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
+      setError(err instanceof Error ? err.message : "Something went wrong!");
     } finally {
       setIsLoading(false);
     }
@@ -74,14 +83,36 @@ export function LoginForm() {
 
       <Field>
         <FieldLabel htmlFor="password">Password</FieldLabel>
-        <Input
-          id="password"
-          type="password"
-          placeholder="Enter your password"
-          {...form.register("password")}
-          disabled={isLoading}
-          aria-invalid={form.formState.errors.password ? "true" : "false"}
-        />
+        <InputGroup>
+          <InputGroupInput
+            id="password"
+            placeholder="Enter your password"
+            {...form.register("password")}
+            disabled={isLoading}
+            aria-invalid={form.formState.errors.password ? "true" : "false"}
+            type={showPassword ? "text" : "password"}
+          />
+          <InputGroupAddon align="inline-end">
+            <InputGroupButton onClick={() => setShowPassword((prev) => !prev)}>
+              {showPassword ? (
+                <HugeiconsIcon
+                  icon={ViewIcon}
+                  size={24}
+                  color="currentColor"
+                  strokeWidth={1.5}
+                />
+              ) : (
+                <HugeiconsIcon
+                  icon={ViewOffSlashIcon}
+                  size={24}
+                  color="currentColor"
+                  strokeWidth={1.5}
+                />
+              )}
+            </InputGroupButton>
+          </InputGroupAddon>
+        </InputGroup>
+
         {form.formState.errors.password && (
           <p className="text-xs text-red-600">
             {form.formState.errors.password.message}
@@ -100,7 +131,7 @@ export function LoginForm() {
             size={24}
             color="currentColor"
             strokeWidth={1.5}
-            className="h-4 w-4 flex-shrink-0"
+            className="h-4 w-4 shrink-0"
           />
 
           {error}
