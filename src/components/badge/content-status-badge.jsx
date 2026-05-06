@@ -19,7 +19,6 @@ const statusMap = {
 
 export default function ContentStatusBadge({ status }) {
   const m = statusMap[status] || statusMap.pending;
-  console.log(m);
   return (
     <Badge variant="outline" className={cn("font-medium", m.className)}>
       {m.label}

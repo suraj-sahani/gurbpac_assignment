@@ -35,3 +35,14 @@ export async function uploadContent(content) {
   inMemoryContents.push(newContent);
   return newContent;
 }
+
+export async function getContentStats() {
+  await new Promise((resolve) => setTimeout(resolve, 200));
+
+  return {
+    total: inMemoryContents.length,
+    approved: inMemoryContents.filter((c) => c.status === "approved").length,
+    pending: inMemoryContents.filter((c) => c.status === "pending").length,
+    rejected: inMemoryContents.filter((c) => c.status === "rejected").length,
+  };
+}
