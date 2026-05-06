@@ -1,9 +1,11 @@
 import { SAMPLE_CONTENT } from "../constants";
 
+const inMemoryContents = structuredClone(SAMPLE_CONTENT);
+
 export async function getTeacherStats(teacherId) {
   await new Promise((resolve) => setTimeout(resolve, 200));
 
-  const teacherContent = SAMPLE_CONTENT.filter(
+  const teacherContent = inMemoryContents.filter(
     (c) => c.teacherId === teacherId,
   );
 
@@ -25,6 +27,6 @@ export async function uploadContent(content) {
     updatedAt: new Date().toISOString(),
   };
 
-  contentStore.push(newContent);
+  inMemoryContents.push(newContent);
   return newContent;
 }

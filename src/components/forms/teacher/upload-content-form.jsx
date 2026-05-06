@@ -42,7 +42,7 @@ const SUBJECTS = [
 
 export function UploadForm() {
   const router = useRouter();
-  const { session, error } = useSession();
+  const { session } = useSession();
   const [preview, setPreview] = useState(null);
   const [file, setFile] = useState(null);
 
@@ -77,7 +77,6 @@ export function UploadForm() {
   };
 
   async function onSubmit(data) {
-    console.dir({ errors: form.formState.errors, sesion_error: error });
     if (!session?.user.id) {
       toast.error("Unauthorized");
       return;
@@ -163,8 +162,13 @@ export function UploadForm() {
             id="rotation"
             type="number"
             min={1}
-            {...form.register("rotationDuration")}
+            {...form.register("rotationDuration", { valueAsNumber: true })}
           />
+          {form.formState.errors.rotationDuration && (
+            <p className="text-xs text-destructive">
+              {form.formState.errors.rotationDuration.message}
+            </p>
+          )}
         </Field>
 
         <Field className="space-y-1.5 sm:col-span-2">
@@ -174,6 +178,11 @@ export function UploadForm() {
             rows={3}
             {...form.register("description")}
           />
+          {form.formState.errors.description && (
+            <p className="text-xs text-destructive">
+              {form.formState.errors.description.message}
+            </p>
+          )}
         </Field>
 
         <Field className="space-y-1.5">
@@ -274,9 +283,6 @@ export function UploadForm() {
       </Field>
 
       <div className="flex justify-end gap-2">
-        <Button type="button" variant="outline" onClick={() => navigate(-1)}>
-          Cancel
-        </Button>
         <Button type="submit" disabled={isSubmitting}>
           {isSubmitting && <Spinner />}
           Submit for approval
