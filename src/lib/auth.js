@@ -93,10 +93,16 @@ export async function getUserRole() {
   return session?.user.role ?? null;
 }
 
-export async function redirectUserByRole() {
+export async function redirectUserByRole(shouldRedirectByRole = false) {
   const session = await getSession();
 
-  if (session) {
+  // 1. Mandatory Redirect: If no session exists, always go to login
+  if (!session) {
+    redirect("/login");
+  }
+
+  // 2. Conditional Redirect: Only redirect by role if the boolean is true
+  if (shouldRedirectByRole) {
     const role = session.user.role;
 
     if (role === "teacher") {
@@ -106,7 +112,8 @@ export async function redirectUserByRole() {
     if (role === "principal") {
       redirect("/principal");
     }
-
-    redirect("/");
   }
+
+  // 3. If session exists and shouldRedirectByRole is false, return the session
+  return session;
 }

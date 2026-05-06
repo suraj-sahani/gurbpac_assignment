@@ -41,7 +41,7 @@ export const SAMPLE_CONTENT = [
     subject: "Mathematics",
     description:
       "A comprehensive introduction to basic mathematical concepts including arithmetic, algebra, and geometry.",
-    fileUrl: "/sample-content-1.jpg",
+    fileUrl: "/test-content.svg",
     fileType: "image",
     status: "approved",
     startTime: "2026-05-07T10:00:00.000Z",
@@ -58,7 +58,7 @@ export const SAMPLE_CONTENT = [
     subject: "Mathematics",
     description:
       "Learn the fundamentals of algebra with practical examples and exercises.",
-    fileUrl: "/sample-content-2.jpg",
+    fileUrl: "/test-content.svg",
     fileType: "image",
     status: "pending",
     startTime: "2026-05-09T10:00:00.000Z",
@@ -75,7 +75,7 @@ export const SAMPLE_CONTENT = [
     subject: "History",
     description:
       "A general overview of major historical events and civilizations throughout world history.",
-    fileUrl: "/sample-content-3.jpg",
+    fileUrl: "/test-content.svg",
     fileType: "image",
     status: "rejected",
     rejectionReason:
@@ -94,7 +94,7 @@ export const SAMPLE_CONTENT = [
     subject: "History",
     description:
       "Deep dive into the ancient Egyptian civilization, culture, and achievements.",
-    fileUrl: "/sample-content-4.jpg",
+    fileUrl: "/test-content.svg",
     fileType: "image",
     status: "approved",
     startTime: "2026-05-11T10:00:00.000Z",

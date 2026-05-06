@@ -15,3 +15,9 @@ export function getImagePreviewUrl(file) {
     reader.onerror = (error) => reject(error);
   });
 }
+
+export const formatDateTime = (dateTime) =>
+  new Date(dateTime).toLocaleString(undefined, {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });

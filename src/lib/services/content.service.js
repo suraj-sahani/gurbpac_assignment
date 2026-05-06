@@ -17,6 +17,11 @@ export async function getTeacherStats(teacherId) {
   };
 }
 
+export async function getTeacherContent(teacherId) {
+  await new Promise((resolve) => setTimeout(resolve, 300));
+  return inMemoryContents.filter((c) => c.teacherId === teacherId);
+}
+
 export async function uploadContent(content) {
   await new Promise((resolve) => setTimeout(resolve, 500));
 

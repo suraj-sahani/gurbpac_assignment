@@ -12,28 +12,25 @@ import {
   Upload06Icon,
 } from "@hugeicons/core-free-icons/index";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+// CSR Page Example
 export default function TeacherDashboard() {
-  const { session, loading } = useSession();
-  const [stats, setStats] = useState({
-    total: 0,
-    approved: 0,
-    pending: 0,
-    rejected: 0,
+  const { session } = useSession();
+
+  const {
+    data: stats,
+    isFetched,
+    error,
+  } = useQuery({
+    queryKey: ["teacher-stats", session?.user?.id],
+    queryFn: () => getTeacherStats(session?.user.id),
+    enabled: !!session?.user?.id,
   });
-  const [statsLoading, setStatsLoading] = useState(true);
 
-  useEffect(() => {
-    if (session?.user.id) {
-      getTeacherStats(session.user.id)
-        .then(setStats)
-        .finally(() => setStatsLoading(false));
-    }
-  }, [session?.user.id]);
-
-  if (loading) {
+  if (!isFetched) {
     return <div className="text-center py-8">Loading...</div>;
   }
 
