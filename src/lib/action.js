@@ -1,6 +1,6 @@
 "use server";
 
-import { createSessionToken, setSessionCookie } from "./auth";
+import { createSessionToken, getSession, setSessionCookie } from "./auth";
 import { SAMPLE_USERS } from "./constants";
 import { loginSchema } from "./schema";
 
