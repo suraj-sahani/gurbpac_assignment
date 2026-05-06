@@ -1,20 +1,21 @@
 "use client";
 import { StatsCard } from "@/components/cards/stat-card";
+import NoData from "@/components/no-data";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useSession } from "@/hooks/use-session";
 import { getTeacherStats } from "@/lib/services/content.service";
-import { TimeScheduleIcon } from "@hugeicons/core-free-icons/index";
-import { CancelSquareIcon } from "@hugeicons/core-free-icons/index";
-import { CheckmarkSquare04Icon } from "@hugeicons/core-free-icons/index";
 import {
+  CancelSquareIcon,
+  CheckmarkSquare04Icon,
   File02Icon,
   ModernTvFourKIcon,
+  TimeScheduleIcon,
   Upload06Icon,
 } from "@hugeicons/core-free-icons/index";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
 // CSR Page Example
 export default function TeacherDashboard() {
@@ -31,8 +32,22 @@ export default function TeacherDashboard() {
   });
 
   if (!isFetched) {
-    return <div className="text-center py-8">Loading...</div>;
+    return (
+      <div className="space-y-4">
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} className="h-50 w-full" />
+          ))}
+        </div>
+        <Skeleton className={"h-60 w-full"} />
+      </div>
+    );
   }
+
+  if (error)
+    return (
+      <NoData title={"Failed to load content."} description={error.message} />
+    );
 
   return (
     <div className="space-y-8">
