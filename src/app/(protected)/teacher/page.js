@@ -2,6 +2,7 @@
 import { StatsCard } from "@/components/cards/stat-card";
 import { Button } from "@/components/ui/button";
 import { useSession } from "@/hooks/use-session";
+import { getTeacherStats } from "@/lib/services/content.service";
 import { TimeScheduleIcon } from "@hugeicons/core-free-icons/index";
 import { CancelSquareIcon } from "@hugeicons/core-free-icons/index";
 import { CheckmarkSquare04Icon } from "@hugeicons/core-free-icons/index";
@@ -106,7 +107,7 @@ export default function TeacherDashboard() {
 
       {/* Quick actions */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Link href="/dashboard/teacher/upload-content">
+        <Link href="/teacher/upload-content">
           <Button className="w-full" size="lg" variant="default">
             <HugeiconsIcon
               icon={Upload06Icon}
@@ -118,7 +119,7 @@ export default function TeacherDashboard() {
             Upload New Content
           </Button>
         </Link>
-        <Link href="/dashboard/teacher/my-content">
+        <Link href="/teacher/my-content">
           <Button className="w-full" size="lg" variant="outline">
             <HugeiconsIcon
               icon={File02Icon}
