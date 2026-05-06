@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -21,11 +20,9 @@ import { getImagePreviewUrl } from "@/lib/utils";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ImageAdd02Icon } from "@hugeicons/core-free-icons/index";
-import { Alert02Icon, Upload06Icon } from "@hugeicons/core-free-icons/index";
 import { HugeiconsIcon } from "@hugeicons/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import PropTypes from "prop-types";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -43,10 +40,8 @@ const SUBJECTS = [
 export function UploadForm() {
   const router = useRouter();
   const { session } = useSession();
-  const [preview, setPreview] = useState(null);
-  const [file, setFile] = useState(null);
-
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState(null);
   const fileInputRef = useRef(null);
 
   const form = useForm({
@@ -61,16 +56,16 @@ export function UploadForm() {
     },
   });
 
+  const contentMedia = form.watch("file");
+
   const handleFileChange = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     try {
       form.setValue("file", file);
-
-      // Generate preview
-      const previewUrl = await getImagePreviewUrl(file);
-      setPreview(previewUrl);
+      const preview = await getImagePreviewUrl(file);
+      setPreviewUrl(preview);
     } catch (err) {
       console.error("Error processing file:", err);
     }
@@ -90,7 +85,7 @@ export function UploadForm() {
         title: data.title,
         subject: data.subject,
         description: data.description,
-        fileUrl: preview || "/placeholder.jpg",
+        fileUrl: previewUrl || "/placeholder.jpg",
         fileType: "image",
         startTime: new Date(data.startTime).toISOString(),
         endTime: new Date(data.endTime).toISOString(),
@@ -98,9 +93,8 @@ export function UploadForm() {
         status: "pending",
       });
 
-      // Reset form
       form.reset();
-      setPreview(null);
+      setPreviewUrl(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
 
       toast.success("Product Created Successfully.");
@@ -221,18 +215,17 @@ export function UploadForm() {
             className="hidden"
             id="fileInput"
           />
-          {preview ? (
+          {previewUrl ? (
             <div className="space-y-1">
               <div className="relative w-full h-30 bg-muted rounded-lg overflow-hidden">
                 <img
-                  src={preview}
+                  src={previewUrl}
                   alt="Preview"
                   className="w-full h-full object-cover"
                 />
               </div>
               <p className="text-xs text-muted-foreground text-center">
-                {form.watch("file")?.name}{" "}
-                {(form.watch("file").size / 1024).toFixed(0)} KB
+                {contentMedia?.name} {(contentMedia.size / 1024).toFixed(0)} KB
               </p>
               <Button
                 type="button"
@@ -270,11 +263,6 @@ export function UploadForm() {
           )}
         </Card>
 
-        {file && (
-          <p className="text-xs text-muted-foreground">
-            {file.name} · {(file.size / 1024).toFixed(0)} KB
-          </p>
-        )}
         {form.formState.errors.file && (
           <p className="text-xs text-destructive">
             {form.formState.errors.file.message}

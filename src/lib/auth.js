@@ -1,6 +1,13 @@
 import { cookies } from "next/headers";
+import { SignJWT, jwtVerify } from "jose";
+import { redirect } from "next/navigation";
 
 const SESSION_COOKIE_NAME = "auth_session";
+const JWT_SECRET = new TextEncoder().encode(
+  process.env.JWT_SECRET || "fallback-secret-use-env-variable-in-production",
+);
+const ALG = "HS256";
+
 const SESSION_COOKIE_OPTIONS = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
@@ -8,29 +15,27 @@ const SESSION_COOKIE_OPTIONS = {
   maxAge: 24 * 60 * 60,
 };
 
-export function createSessionToken(user) {
-  const tokenData = {
+export async function createSessionToken(user) {
+  const token = await new SignJWT({
     userId: user.id,
     email: user.email,
     role: user.role,
-    iat: Math.floor(Date.now() / 1000),
-    exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60,
-  };
-  return Buffer.from(JSON.stringify(tokenData)).toString("base64");
+  })
+    .setProtectedHeader({ alg: ALG })
+    .setIssuedAt()
+    .setExpirationTime("24h")
+    .sign(JWT_SECRET);
+
+  return token;
 }
 
-export function verifySessionToken(token) {
+export async function verifySessionToken(token) {
   try {
-    const decoded = Buffer.from(token, "base64").toString("utf-8");
-    const data = JSON.parse(decoded);
-
-    // Check expiration
-    if (data.exp < Math.floor(Date.now() / 1000)) {
-      return null;
-    }
-
-    return data;
-  } catch {
+    const { payload } = await jwtVerify(token, JWT_SECRET, {
+      algorithms: [ALG],
+    });
+    return payload;
+  } catch (error) {
     return null;
   }
 }
@@ -44,7 +49,8 @@ export async function getSession() {
       return null;
     }
 
-    const decoded = verifySessionToken(token);
+    // verifySessionToken is now async
+    const decoded = await verifySessionToken(token);
     if (!decoded) {
       return null;
     }
@@ -57,6 +63,7 @@ export async function getSession() {
         role: decoded.role,
       },
       token,
+
       expiresAt: decoded.exp * 1000,
     };
 
@@ -84,4 +91,22 @@ export async function isAuthenticated() {
 export async function getUserRole() {
   const session = await getSession();
   return session?.user.role ?? null;
+}
+
+export async function redirectUserByRole() {
+  const session = await getSession();
+
+  if (session) {
+    const role = session.user.role;
+
+    if (role === "teacher") {
+      redirect("/teacher");
+    }
+
+    if (role === "principal") {
+      redirect("/principal");
+    }
+
+    redirect("/");
+  }
 }

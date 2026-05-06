@@ -49,9 +49,9 @@ export function LoginForm() {
 
       // Redirect based on user role
       if (result.user?.role === "teacher") {
-        router.push("/dashboard/teacher");
+        router.push("/teacher");
       } else if (result.user?.role === "principal") {
-        router.push("/dashboard/principal");
+        router.push("/principal");
       } else {
         router.push("/");
       }

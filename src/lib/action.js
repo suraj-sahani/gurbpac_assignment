@@ -30,7 +30,7 @@ export async function loginAction(email, password) {
     }
 
     // Create session token
-    const token = createSessionToken(user);
+    const token = await createSessionToken(user);
 
     // Set session cookie
     await setSessionCookie(token);
