@@ -1,9 +1,8 @@
 import { LoginForm } from "@/components/forms/auth/login-form";
-import { getSession, redirectUserByRole } from "@/lib/auth";
-import { redirect } from "next/navigation";
+import { redirectUserByRole } from "@/lib/services/auth.service";
 
 export default async function LoginPage() {
-  await redirectUserByRole();
+  await redirectUserByRole(true);
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-background px-4">

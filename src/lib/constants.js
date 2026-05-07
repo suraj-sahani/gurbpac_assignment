@@ -103,4 +103,53 @@ export const SAMPLE_CONTENT = [
     createdAt: "2026-05-02T10:00:00.000Z",
     updatedAt: "2026-05-02T10:00:00.000Z",
   },
+  {
+    id: "content-5",
+    teacherId: "user-3",
+    teacherName: "Dr. Emily White",
+    title: "Modern Physics Concepts",
+    subject: "Physics",
+    description:
+      "An ongoing live session covering quantum mechanics and relativity.",
+    fileUrl: "/test-content.svg",
+    fileType: "image",
+    status: "approved",
+    startTime: "2026-01-01T00:00:00.000Z", // Well in the past
+    endTime: "2027-01-01T00:00:00.000Z", // Well in the future
+    rotationDuration: 30,
+    createdAt: "2026-01-01T00:00:00.000Z",
+    updatedAt: "2026-01-01T00:00:00.000Z",
+  },
+  {
+    id: "content-6",
+    teacherId: "user-4",
+    teacherName: "Prof. Michael Brown",
+    title: "Organic Chemistry 101",
+    subject: "Chemistry",
+    description: "Continuous live exploration of carbon-based compounds.",
+    fileUrl: "/test-content.svg",
+    fileType: "image",
+    status: "approved",
+    startTime: "2026-05-01T00:00:00.000Z", // Started a few days ago
+    endTime: "2030-05-01T00:00:00.000Z", // Ends years from now
+    rotationDuration: 20,
+    createdAt: "2026-05-01T00:00:00.000Z",
+    updatedAt: "2026-05-01T00:00:00.000Z",
+  },
+  {
+    id: "content-7",
+    teacherId: "user-5",
+    teacherName: "Ms. Linda Garcia",
+    title: "English Literature Analysis",
+    subject: "English",
+    description: "Daily live discussion on classic literature.",
+    fileUrl: "/test-content.svg",
+    fileType: "image",
+    status: "approved",
+    startTime: "2020-01-01T00:00:00.000Z", // Long term past
+    endTime: "2099-12-31T23:59:59.000Z", // Long term future
+    rotationDuration: 60,
+    createdAt: "2026-05-01T00:00:00.000Z",
+    updatedAt: "2026-05-01T00:00:00.000Z",
+  },
 ];

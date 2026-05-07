@@ -11,11 +11,7 @@ import ContentStatusBadge from "../badge/content-status-badge";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  approveContent,
-  rejectContent,
-  updateContentApprovalStatus,
-} from "@/lib/services/content.service";
+
 import { useSession } from "@/hooks/use-session";
 import { Spinner } from "../ui/spinner";
 import { toast } from "sonner";
@@ -31,6 +27,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
+import { updateContentApprovalStatus } from "@/lib/services/approval.service";
 
 export default function PendingApprovalContentCard({ content }) {
   const {

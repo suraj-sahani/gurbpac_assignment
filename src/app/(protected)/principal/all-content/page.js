@@ -58,7 +58,7 @@ export default function AllContentPage() {
               setStatus(v);
             }}
           >
-            <SelectTrigger className="w-[160px]">
+            <SelectTrigger className="w-40">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
