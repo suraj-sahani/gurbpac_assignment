@@ -98,3 +98,21 @@ export const getLiveTeachers = async () => {
     content: c,
   }));
 };
+
+export const getLiveTeacherContent = async (teacherId) => {
+  await new Promise((resolve) => setTimeout(resolve, 300));
+  const now = Date.now();
+  const live = inMemoryContents.filter(
+    (c) =>
+      c.teacherId === teacherId &&
+      c.status === "approved" &&
+      +new Date(c.startTime) <= now &&
+      +new Date(c.endTime) >= now,
+  );
+
+  if (!live.length) return null;
+
+  return live.sort(
+    (a, b) => +new Date(b.startTime) - +new Date(a.startTime),
+  )[0];
+};
