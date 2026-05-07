@@ -1,9 +1,6 @@
 import { LoginForm } from "@/components/forms/auth/login-form";
-import { redirectUserByRole } from "@/lib/services/auth.service";
 
 export default async function LoginPage() {
-  await redirectUserByRole(true);
-
   return (
     <main className="min-h-screen flex items-center justify-center bg-background px-4">
       <div className="w-full max-w-md space-y-8">

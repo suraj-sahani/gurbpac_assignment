@@ -1,17 +1,16 @@
 import ContentCard from "@/components/cards/content-card";
 import NoData from "@/components/no-data";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { redirectUserByRole } from "@/lib/auth";
+import { getSession } from "@/lib/services/auth.service";
+
 import { getTeacherContent } from "@/lib/services/content.service";
-import { FolderOpen } from "@hugeicons/core-free-icons/index";
-import { Upload06Icon } from "@hugeicons/core-free-icons/index";
+import { FolderOpen, Upload06Icon } from "@hugeicons/core-free-icons/index";
 import { HugeiconsIcon } from "@hugeicons/react";
 import Link from "next/link";
 
 // SSR Page Example
 export default async function TeacherContentPage() {
-  const session = await redirectUserByRole();
+  const session = await getSession();
   const teacherContent = await getTeacherContent(session.user.id);
 
   if (!teacherContent.length) {

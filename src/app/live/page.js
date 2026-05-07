@@ -66,10 +66,7 @@ export default function LiveBroadCastsPage() {
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-green-400" />
             Live now
           </Badge>
-          {/* <span className="inline-flex items-center gap-2 rounded-full border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-green-400" />
-            Live now
-          </span>*/}
+
           <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
             Explore live broadcasts
           </h1>

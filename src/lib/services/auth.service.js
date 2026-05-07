@@ -20,6 +20,7 @@ export async function createSessionToken(user) {
     userId: user.id,
     email: user.email,
     role: user.role,
+    name: user.name,
   })
     .setProtectedHeader({ alg: ALG })
     .setIssuedAt()
@@ -59,7 +60,7 @@ export async function getSession() {
       user: {
         id: decoded.userId,
         email: decoded.email,
-        name: "",
+        name: decoded?.name ?? "",
         role: decoded.role,
       },
       token,
@@ -91,29 +92,4 @@ export async function isAuthenticated() {
 export async function getUserRole() {
   const session = await getSession();
   return session?.user.role ?? null;
-}
-
-export async function redirectUserByRole(shouldRedirectByRole = false) {
-  const session = await getSession();
-
-  // 1. Mandatory Redirect: If no session exists, always go to login
-  if (!session) {
-    redirect("/login");
-  }
-
-  // 2. Conditional Redirect: Only redirect by role if the boolean is true
-  if (shouldRedirectByRole) {
-    const role = session.user.role;
-
-    if (role === "teacher") {
-      redirect("/teacher");
-    }
-
-    if (role === "principal") {
-      redirect("/principal");
-    }
-  }
-
-  // 3. If session exists and shouldRedirectByRole is false, return the session
-  return session;
 }

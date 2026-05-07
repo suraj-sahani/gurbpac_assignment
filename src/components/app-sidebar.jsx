@@ -1,185 +1,163 @@
-"use client"
+"use client";
 
-import * as React from "react"
-
-import { NavMain } from "@/components/nav-main"
-import { NavProjects } from "@/components/nav-projects"
-import { NavUser } from "@/components/nav-user"
-import { TeamSwitcher } from "@/components/team-switcher"
+import { NavUser } from "@/components/nav-user";
+import { TeamSwitcher } from "@/components/team-switcher";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
+  SidebarGroup,
   SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
   SidebarRail,
-} from "@/components/ui/sidebar"
-import { HugeiconsIcon } from "@hugeicons/react"
-import { LayoutBottomIcon, AudioWave01Icon, CommandIcon, ComputerTerminalIcon, RoboticIcon, BookOpen02Icon, Settings05Icon, CropIcon, PieChartIcon, MapsIcon } from "@hugeicons/core-free-icons"
+} from "@/components/ui/sidebar";
+import { useSession } from "@/hooks/use-session";
+import { RadioIcon } from "@hugeicons/core-free-icons/index";
+import {
+  DashboardSquare02Icon,
+  Files01Icon,
+  Folder02Icon,
+  ShieldBanIcon,
+  Upload05Icon,
+} from "@hugeicons/core-free-icons/index";
+import { HugeiconsIcon } from "@hugeicons/react";
+import Link from "next/link";
 
-// This is sample data.
-const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+const teacherNav = [
+  {
+    title: "Dashboard",
+    url: "/teacher",
+    icon: (
+      <HugeiconsIcon
+        icon={DashboardSquare02Icon}
+        size={24}
+        color="currentColor"
+        strokeWidth={2}
+      />
+    ),
   },
-  teams: [
-    {
-      name: "Acme Inc",
-      logo: (
-        <HugeiconsIcon icon={LayoutBottomIcon} strokeWidth={2} />
-      ),
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: (
-        <HugeiconsIcon icon={AudioWave01Icon} strokeWidth={2} />
-      ),
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: (
-        <HugeiconsIcon icon={CommandIcon} strokeWidth={2} />
-      ),
-      plan: "Free",
-    },
-  ],
-  navMain: [
-    {
-      title: "Playground",
-      url: "#",
-      icon: (
-        <HugeiconsIcon icon={ComputerTerminalIcon} strokeWidth={2} />
-      ),
-      isActive: true,
-      items: [
-        {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Models",
-      url: "#",
-      icon: (
-        <HugeiconsIcon icon={RoboticIcon} strokeWidth={2} />
-      ),
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Documentation",
-      url: "#",
-      icon: (
-        <HugeiconsIcon icon={BookOpen02Icon} strokeWidth={2} />
-      ),
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: (
-        <HugeiconsIcon icon={Settings05Icon} strokeWidth={2} />
-      ),
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
-    },
-  ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: (
-        <HugeiconsIcon icon={CropIcon} strokeWidth={2} />
-      ),
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: (
-        <HugeiconsIcon icon={PieChartIcon} strokeWidth={2} />
-      ),
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: (
-        <HugeiconsIcon icon={MapsIcon} strokeWidth={2} />
-      ),
-    },
-  ],
-}
+  {
+    title: "Upload Content",
+    url: "/teacher/upload-content",
+    icon: (
+      <HugeiconsIcon
+        icon={Upload05Icon}
+        size={24}
+        color="currentColor"
+        strokeWidth={2}
+      />
+    ),
+  },
+  {
+    title: "My Content",
+    url: "/teacher/my-content",
+    icon: (
+      <HugeiconsIcon
+        icon={Folder02Icon}
+        size={24}
+        color="currentColor"
+        strokeWidth={2}
+      />
+    ),
+  },
+];
 
-export function AppSidebar({
-  ...props
-}) {
+const principalNav = [
+  {
+    title: "Dashboard",
+    url: "/principal",
+    icon: (
+      <HugeiconsIcon
+        icon={DashboardSquare02Icon}
+        size={24}
+        color="currentColor"
+        strokeWidth={2}
+      />
+    ),
+  },
+  {
+    title: "Pending Approvals",
+    url: "/principal/pending-approval",
+    icon: (
+      <HugeiconsIcon
+        icon={ShieldBanIcon}
+        size={24}
+        color="currentColor"
+        strokeWidth={2}
+      />
+    ),
+  },
+  {
+    title: "All Content",
+    url: "/principal/all-content",
+    icon: (
+      <HugeiconsIcon
+        icon={Files01Icon}
+        size={24}
+        color="currentColor"
+        strokeWidth={2}
+      />
+    ),
+  },
+];
+
+export function AppSidebar({ ...props }) {
+  const { session, loading } = useSession();
+  const role = session?.user?.role;
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              size="lg"
+              render={<Link href={"/"} />}
+              className="data-[slot=sidebar-menu-button]:p-1.75!"
+            >
+              <HugeiconsIcon
+                icon={RadioIcon}
+                size={32}
+                color="currentColor"
+                strokeWidth={2}
+              />
+
+              <p className="text-sm font-semibold leading-tight">EduCast</p>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        <SidebarGroup>
+          {role === "teacher"
+            ? teacherNav.map((link) => (
+                <SidebarMenuItem key={link.title}>
+                  <SidebarMenuButton
+                    tooltip={link.title}
+                    render={<Link href={link.url} />}
+                  >
+                    {link.icon} {link.title}
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))
+            : role === "principal"
+              ? principalNav.map((link) => (
+                  <SidebarMenuItem key={link.title}>
+                    <SidebarMenuButton
+                      tooltip={link.title}
+                      render={<Link href={link.url} />}
+                    >
+                      {link.icon} {link.title}
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))
+              : null}
+        </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
