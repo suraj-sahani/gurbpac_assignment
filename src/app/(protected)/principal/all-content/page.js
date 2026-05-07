@@ -21,12 +21,69 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { VirtualizedTable } from "@/components/virtualized-table";
 import { useDebounce } from "@/hooks/use-debounce";
 import { getAllContent } from "@/lib/services/content.service";
 import { formatDateTime } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useState } from "react";
+
+export const columns = [
+  {
+    accessorKey: "fileUrl",
+    header: "Preview",
+    cell: ({ row }) => {
+      const c = row.original; // Access the full object
+      return (
+        <Image
+          height={48}
+          width={64}
+          src={c.fileUrl}
+          alt={c.title}
+          className="h-12 w-16 rounded object-cover"
+        />
+      );
+    },
+  },
+  {
+    accessorKey: "title",
+    header: "Title",
+    cell: ({ row }) => (
+      <div className="font-medium">{row.getValue("title")}</div>
+    ),
+  },
+  {
+    accessorKey: "subject",
+    header: "Subject",
+  },
+  {
+    accessorKey: "teacherName",
+    header: "Teacher",
+  },
+  {
+    accessorKey: "startTime", // Using startTime as the key, but we access both in the cell
+    header: "Schedule",
+    cell: ({ row }) => {
+      const c = row.original;
+      return (
+        <div className="space-y-1">
+          <ContentScheduleBadge start={c.startTime} end={c.endTime} />
+          <p className="text-xs text-muted-foreground">
+            {formatDateTime(c.startTime)} → {formatDateTime(c.endTime)}
+          </p>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ row }) => {
+      return <ContentStatusBadge status={row.getValue("status")} />;
+    },
+  },
+];
 
 export default function AllContentPage() {
   const [status, setStatus] = useState("All");
@@ -81,48 +138,12 @@ export default function AllContentPage() {
       ) : !contents.length ? (
         <NoData title="No content matches your filters" />
       ) : (
-        <Card className="overflow-hidden">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-20">Preview</TableHead>
-                <TableHead>Title</TableHead>
-                <TableHead>Subject</TableHead>
-                <TableHead>Teacher</TableHead>
-                <TableHead>Schedule</TableHead>
-                <TableHead>Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {contents.map((c) => (
-                <TableRow key={c.id}>
-                  <TableCell>
-                    <Image
-                      height={48}
-                      width={64}
-                      src={c.fileUrl}
-                      alt={c.title}
-                      className="h-12 w-16 rounded object-cover"
-                    />
-                  </TableCell>
-                  <TableCell className="font-medium">{c.title}</TableCell>
-                  <TableCell>{c.subject}</TableCell>
-                  <TableCell>{c.teacherName}</TableCell>
-                  <TableCell className="space-y-1">
-                    <ContentScheduleBadge start={c.startTime} end={c.endTime} />
-                    <p className="text-xs text-muted-foreground">
-                      {formatDateTime(c.startTime)} →{" "}
-                      {formatDateTime(c.endTime)}
-                    </p>
-                  </TableCell>
-                  <TableCell>
-                    <ContentStatusBadge status={c.status} />
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Card>
+        <VirtualizedTable
+          columns={columns}
+          data={contents}
+          containerHeight="500px" // Adjust based on your viewport
+          estimateRowHeight={80} // Your rows are taller due to images (~80px)
+        />
       )}
     </div>
   );
