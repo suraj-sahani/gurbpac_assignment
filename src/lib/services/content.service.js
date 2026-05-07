@@ -146,3 +146,23 @@ export async function updateContentApprovalStatus(
     data: result,
   };
 }
+
+export async function getAllContent(filters) {
+  const { search, status } = filters || {};
+  await new Promise((resolve) => setTimeout(resolve, 300));
+
+  let items = structuredClone(inMemoryContents);
+  if (status && status.toLowerCase() !== "all")
+    items = items.filter((c) => c.status === status.toLowerCase());
+  if (search) {
+    const q = search.toLowerCase();
+    items = items.filter(
+      (c) =>
+        c.title.toLowerCase().includes(q) ||
+        c.subject.toLowerCase().includes(q) ||
+        c.teacherName.toLowerCase().includes(q),
+    );
+  }
+
+  return items.sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt));
+}
