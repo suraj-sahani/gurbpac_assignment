@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/input-group";
 import { ViewOffSlashIcon } from "@hugeicons/core-free-icons/index";
 import { ViewIcon } from "@hugeicons/core-free-icons/index";
+import Link from "next/link";
 
 export function LoginForm() {
   const router = useRouter();
@@ -138,13 +139,42 @@ export function LoginForm() {
         </div>
       )}
 
-      {/* Demo credentials */}
-      <div className="rounded-md bg-blue-50 p-3 text-xs text-blue-700 space-y-1">
-        <p className="font-semibold">Demo Credentials:</p>
-        <p>Teacher: teacher@example.com / password123</p>
-        <p>Principal: principal@example.com / password123</p>
-        <p>Student: student@example.com / password123</p>
+      <div className="mt-6 rounded-md border bg-muted/40 p-3 text-xs">
+        <p className="mb-2 font-medium">
+          Demo accounts (password: <code>password123</code>)
+        </p>
+        <div className="space-y-1 mt-4">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => {
+              form.setValue("email", "teacher@example.com");
+              form.setValue("password", "password123");
+            }}
+            className={"w-full"}
+          >
+            Teacher · teacher@example.com
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => {
+              form.setValue("email", "principal@example.com");
+              form.setValue("password", "password123");
+            }}
+            className={"w-full"}
+          >
+            Principal · principal@example.com
+          </Button>
+        </div>
       </div>
+
+      <p className="mt-4 text-center text-xs text-muted-foreground">
+        Looking for live broadcasts?{" "}
+        <Link href="/live" className="font-medium text-primary hover:underline">
+          Browse as student
+        </Link>
+      </p>
     </form>
   );
 }

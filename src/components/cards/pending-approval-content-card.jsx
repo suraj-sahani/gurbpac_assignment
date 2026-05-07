@@ -28,6 +28,12 @@ import {
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import { updateContentApprovalStatus } from "@/lib/services/approval.service";
+import { useState } from "react";
+import { Input } from "../ui/input";
+import { Field, FieldLabel } from "../ui/field";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import z from "zod";
 
 export default function PendingApprovalContentCard({ content }) {
   const {
@@ -45,6 +51,21 @@ export default function PendingApprovalContentCard({ content }) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { session } = useSession();
+
+  const form = useForm({
+    resolver: zodResolver(
+      z.object({
+        reason: z
+          .string()
+          .trim()
+          .nonempty({ error: "Rejection reason is required" }),
+      }),
+    ),
+    defaultValues: {
+      reason: "",
+    },
+  });
+
   const { isPending: isPendingApproval, mutate: mutateApproval } = useMutation({
     mutationFn: () =>
       updateContentApprovalStatus(id, session?.user?.id, "approved"),
@@ -66,7 +87,7 @@ export default function PendingApprovalContentCard({ content }) {
           id,
           session?.user?.id,
           "rejected",
-          "Sample rejection reason",
+          form.getValues("reason"),
         ),
       onSuccess: (data) => {
         toast.success(data.message);
@@ -147,15 +168,29 @@ export default function PendingApprovalContentCard({ content }) {
                     the content and cannot be approved again.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={() => mutateRejection()}
-                    disabled={isPendingRejection}
-                  >
-                    {isPendingRejection ? <Spinner /> : "Confirm Rejection"}
-                  </AlertDialogAction>
-                </AlertDialogFooter>
+                <form onSubmit={form.handleSubmit(mutateRejection)}>
+                  <Field>
+                    <FieldLabel>Rejection Reasons</FieldLabel>
+                    <Input type={"text"} {...form.register("reason")} />
+                    {form.formState.errors.reason && (
+                      <p className="text-xs text-destructive">
+                        {form.formState.errors.reason.message}
+                      </p>
+                    )}
+                  </Field>
+                  <div className="flex items-center gap-2 mt-2 justify-end">
+                    <AlertDialogCancel type="button">Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                      type="submit"
+                      // onClick={() => mutateRejection()}
+                      disabled={isPendingRejection}
+                    >
+                      {isPendingRejection ? <Spinner /> : "Confirm Rejection"}
+                    </AlertDialogAction>
+                  </div>
+                </form>
+
+                <AlertDialogFooter></AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
           </div>

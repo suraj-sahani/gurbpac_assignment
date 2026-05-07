@@ -27,6 +27,8 @@ import {
 } from "@hugeicons/core-free-icons";
 import { useSession } from "@/hooks/use-session";
 import { Skeleton } from "./ui/skeleton";
+import { logout } from "@/lib/action";
+import { redirect } from "next/navigation";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
@@ -112,7 +114,12 @@ export function NavUser() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={async () => {
+                const res = await logout();
+                if (res.success) redirect("/login");
+              }}
+            >
               <HugeiconsIcon icon={LogoutIcon} strokeWidth={2} />
               Log out
             </DropdownMenuItem>

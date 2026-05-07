@@ -2,9 +2,11 @@
 import { StatsCard } from "@/components/cards/stat-card";
 import NoData from "@/components/no-data";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useSession } from "@/hooks/use-session";
 import { getTeacherStats } from "@/lib/services/content.service";
+import { ArrowUpRight01Icon } from "@hugeicons/core-free-icons/index";
 import {
   CancelSquareIcon,
   CheckmarkSquare04Icon,
@@ -52,13 +54,41 @@ export default function TeacherDashboard() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-foreground">
-          Teacher Dashboard
-        </h1>
-        <p className="text-muted-foreground mt-1">
-          Welcome back, {session?.user.name}
-        </p>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 className="text-2xl font-semibold">
+            Welcome, {session?.user?.name}
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            Manage and broadcast your educational content.
+          </p>
+        </div>
+        <div className="flex gap-2">
+          <Link href="/teacher/upload-content">
+            <Button>
+              <HugeiconsIcon
+                icon={Upload06Icon}
+                size={24}
+                color="currentColor"
+                strokeWidth={1.5}
+                className="h-4 w-4 mr-2"
+              />
+              Upload Content
+            </Button>
+          </Link>
+          <Link href={`/live/${session?.user?.id}`} target="_blank">
+            <Button variant="outline">
+              <HugeiconsIcon
+                icon={ArrowUpRight01Icon}
+                size={24}
+                color="currentColor"
+                strokeWidth={1.5}
+                className="mr-2 h-4 w-4"
+              />
+              Open Live Page
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* Stats */}
@@ -117,45 +147,21 @@ export default function TeacherDashboard() {
         />
       </div>
 
-      {/* Quick actions */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Link href="/teacher/upload-content">
-          <Button className="w-full" size="lg" variant="default">
-            <HugeiconsIcon
-              icon={Upload06Icon}
-              size={24}
-              color="currentColor"
-              strokeWidth={1.5}
-              className="h-4 w-4 mr-2"
-            />
-            Upload New Content
-          </Button>
-        </Link>
-        <Link href="/teacher/my-content">
-          <Button className="w-full" size="lg" variant="outline">
-            <HugeiconsIcon
-              icon={File02Icon}
-              size={24}
-              color="currentColor"
-              strokeWidth={1.5}
-              className="h-4 w-4 mr-2"
-            />
-            View My Content
-          </Button>
-        </Link>
-      </div>
-
       {/* Info section */}
-      <div className="rounded-lg bg-blue-50 border border-blue-200 p-6">
-        <h2 className="font-semibold text-blue-900 mb-2">How it works</h2>
-        <ol className="space-y-2 text-sm text-blue-800 list-decimal list-inside">
-          <li>Upload your content (images only: JPG, PNG, GIF)</li>
-          <li>Add a title, subject, and description</li>
-          <li>Set when your content will be active</li>
-          <li>Principal reviews and approves your content</li>
-          <li>Content goes live once approved</li>
-        </ol>
-      </div>
+      <Card>
+        <CardContent className="p-6">
+          <h3 className="mb-2 text-sm font-semibold">Quick tips</h3>
+          <ul className="list-disc space-y-1 pl-5 text-sm text-muted-foreground">
+            <li>Upload images (JPG, PNG, GIF) up to 10MB.</li>
+            <li>
+              Set start and end times to schedule when content broadcasts.
+            </li>
+            <li>
+              Content is visible publicly only after the principal approves it.
+            </li>
+          </ul>
+        </CardContent>
+      </Card>
     </div>
   );
 }

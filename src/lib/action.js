@@ -1,6 +1,7 @@
 "use server";
 
 import {
+  clearSessionCookie,
   createSessionToken,
   getSession,
   setSessionCookie,

@@ -29,14 +29,10 @@ export const uploadSchema = z
       .max(480, { error: "Rotation duration must be less than 8 hours" }),
     file: z
       .file({ error: "File is required." })
-      .refine(
-        (file) => ["image/jpeg", "image/png", "image/gif"].includes(file.type),
-        "Only JPG, PNG, and GIF files are allowed",
-      )
-      .refine(
-        (file) => file.size <= 10 * 1024 * 1024,
-        "File size must be less than 10MB",
-      ),
+      .max(10_000_000, { error: "Max file size is 10MB" })
+      .mime(["image/png", "image/jpeg", "image/jpg"], {
+        error: "Only JPG, PNG, and GIF files are allowed",
+      }),
   })
   .refine(
     (data) => {

@@ -79,7 +79,7 @@ const principalNav = [
   },
   {
     title: "Pending Approvals",
-    url: "/principal/pending-approval",
+    url: "/principal/pending-approvals",
     icon: (
       <HugeiconsIcon
         icon={ShieldBanIcon}
