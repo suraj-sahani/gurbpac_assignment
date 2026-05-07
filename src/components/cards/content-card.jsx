@@ -55,7 +55,6 @@ export default function ContentCard({ content }) {
   );
 }
 
-// PropTypes for ContentCard
 ContentCard.propTypes = {
   content: PropTypes.shape({
     id: PropTypes.string.isRequired,

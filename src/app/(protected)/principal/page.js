@@ -117,7 +117,7 @@ export default function PrincipalDashboadPage() {
 
       {/* Quick actions */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Link href="/principal/pending">
+        <Link href="/principal/pending-approvals">
           <Button className="w-full" size="lg" variant="default">
             <HugeiconsIcon
               icon={CheckmarkCircle03Icon}
