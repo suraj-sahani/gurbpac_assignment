@@ -1,7 +1,6 @@
 "use client";
 
 import { NavUser } from "@/components/nav-user";
-import { TeamSwitcher } from "@/components/team-switcher";
 import {
   Sidebar,
   SidebarContent,
@@ -14,11 +13,11 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { useSession } from "@/hooks/use-session";
-import { RadioIcon } from "@hugeicons/core-free-icons/index";
 import {
   DashboardSquare02Icon,
   Files01Icon,
   Folder02Icon,
+  RadioIcon,
   ShieldBanIcon,
   Upload05Icon,
 } from "@hugeicons/core-free-icons/index";

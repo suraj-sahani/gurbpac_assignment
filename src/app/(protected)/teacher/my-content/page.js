@@ -11,7 +11,7 @@ import Link from "next/link";
 // SSR Page Example
 export default async function TeacherContentPage() {
   const session = await getSession();
-  const teacherContent = await getTeacherContent(session.user.id);
+  const teacherContent = await getTeacherContent(session?.user?.id);
 
   if (!teacherContent.length) {
     return (

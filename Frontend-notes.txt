@@ -1,0 +1,86 @@
+EduCast — Content Broadcasting System (Frontend)
+==================================================
+
+Stack
+-----
+- Next.js 16/React 19 + JavaScript
+- Tailwind CSS + shadcn/ui
+- React Hook Form + Zod for forms & validation
+- Tanstack Table & Tanstack Virtual for rendering large lists/tables
+- Tanstack/React Query for efficient data fetching
+- sonner for toasts
+
+Project Structure
+-----------------
+src/
+  components/         Reusable UI building blocks (StatCard, NoData,
+                       StatusBadge, ProtectedRoute)
+  components/ui/      shadcn primitives
+  hooks/              Reusable hooks (useSession, useDebounce)
+  layouts/            App shell layouts (DashboardLayout w/ sidebar)
+  app/pages/              Route-level pages (Login, LivePage, teacher/*, principal/*)
+  services/           API service layer (auth, content, approval, api)
+  utils/              storage helpers, formatters
+
+Authentication Flow
+-------------------
+- authService.login validates credentials against the sample users in
+  secure HTTP Only cookie, returns { token, user } and persists the session.
+- Unauthenticated users hitting protected routes are redirected to /login by
+  ProtectedRoute. Logged-in users hitting / are redirected to their role's
+  dashboard.
+
+Role-Based Routing
+------------------
+- ProtectedRoute accepts an optional `role` and forwards mismatched roles to
+  their own dashboard (no flash of wrong content).
+- The sidebar in DashboardLayout shows different items per role:
+    Teacher:   Dashboard, Upload Content, My Content
+    Principal: Dashboard, Pending Approvals, All Content
+- /live/:teacherId is fully public and requires no auth.
+- /live is the public student landing page listing all teachers
+  currently broadcasting live; students can click any card to watch.
+
+API Integration Approach
+------------------------
+- All API calls live in src/services/*.js and are imported by hooks/pages.
+- Components never call the persistence layer directly.
+- Each service simulates network latency and throws an ApiError on
+  failures, so swapping the implementation for fetch/axios is a one-file change
+  per service. Function signatures are intentionally async and Promise-based.
+
+State Management
+----------------
+- Auth state: Secure session cookies.
+- Server data: local component state via tanstack/react query.
+-  React Query is wired up at the root and is the
+  natural next step if caching/deduping becomes important.
+- Form state: React Hook Form per form, with Zod schemas for validation.
+- Persistence: In-memory store is used in service level.
+
+UX / Edge Cases
+---------------
+- Loading: skeletons on lists, spinners in buttons.
+- Empty: dedicated EmptyState component on every list page + live page.
+- Errors: inline error states + sonner toasts; ApiError messages bubble up.
+- Form validation: Zod (email format, required fields, end > start, file
+  type/size). File previews appear before submit.
+- Scheduling badges: ScheduleBadge derives Active / Scheduled / Expired from
+  start/end timestamps purely on the client.
+- Polling is done with tanstack/react query that invalidates and fetches latest
+- data periodically.
+
+Demo Accounts (password: "password")
+------------------------------------
+- Teacher:   teacher@example.com  (id: t1)  -> /live/t1 has an active item
+- Teacher:   priya@example.com    (id: t2)
+- Principal: principal@example.com
+
+Assumptions
+-----------
+- No real backend; In-memory storage acts as the database.
+- Files are stored as base64 data URLs to keep things self-contained — a real
+  implementation would upload to object storage and persist a URL.
+- "Rotation duration" is captured but not yet used for slideshow rotation;
+  the live page shows the single most-recent active item (sufficient per spec).
+- Token format is mocked; a real backend will issue a JWT.

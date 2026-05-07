@@ -16,19 +16,19 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { useSession } from "@/hooks/use-session";
+import { logout } from "@/lib/action";
 import {
-  UnfoldMoreIcon,
-  SparklesIcon,
   CheckmarkBadgeIcon,
   CreditCardIcon,
-  NotificationIcon,
   LogoutIcon,
+  NotificationIcon,
+  SparklesIcon,
+  UnfoldMoreIcon,
 } from "@hugeicons/core-free-icons";
-import { useSession } from "@/hooks/use-session";
-import { Skeleton } from "./ui/skeleton";
-import { logout } from "@/lib/action";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { redirect } from "next/navigation";
+import { Skeleton } from "./ui/skeleton";
 
 export function NavUser() {
   const { isMobile } = useSidebar();

@@ -31,10 +31,8 @@ export function VirtualizedTable({
 
   const { rows } = table.getRowModel();
 
-  // The container that handles the scroll
   const parentRef = React.useRef(null);
 
-  // The virtualizer instance
   const rowVirtualizer = useVirtualizer({
     count: rows.length,
     getScrollElement: () => parentRef.current,
@@ -45,7 +43,6 @@ export function VirtualizedTable({
   const virtualRows = rowVirtualizer.getVirtualItems();
   const totalSize = rowVirtualizer.getTotalSize();
 
-  // Calculate spacers to keep the scrollbar accurate
   const paddingTop = virtualRows.length > 0 ? virtualRows?.[0]?.start || 0 : 0;
   const paddingBottom =
     virtualRows.length > 0
